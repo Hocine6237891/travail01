@@ -29,78 +29,57 @@ function userInfo (){
 // }
 
 // Fonction pour créer une nouvelle tâche
-function createTask(description) {
-  const taskItem = document.createElement("div");
-  taskItem.textContent = description;
-  
-  // Ajout de boutons pour marquer comme terminé, modifier et supprimer la tâche
-  const completeBtn = document.createElement("button");
-  completeBtn.textContent = "Terminé";
-  completeBtn.addEventListener("click", function() {
-      taskItem.classList.toggle("completed");
-  });
+// Fonction pour créer une nouvelle tâche
+function sauvegarderInscription() {
+  // Récupérer les valeurs des champs du formulaire
+  var email = document.getElementsByName('email')[0].value;
+  var password = document.getElementsByName('psw')[0].value;
+  var passwordRepeat = document.getElementsByName('psw-repeat')[0].value;
 
-  const editBtn = document.createElement("button");
-  editBtn.textContent = "Modifier";
-  editBtn.addEventListener("click", function() {
-      const nouveauText = prompt("Modifier la tâche:", taskItem.textContent);
-      if (nouveauText !== null) {
-          taskItem.textContent = nouveauText;
-      }
-  });
+  // Vérifier si les mots de passe correspondent
+  if (password !== passwordRepeat) {
+      alert("Les mots de passe ne correspondent pas !");
+      return;
+  }
 
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Supprimer";
-  deleteBtn.addEventListener("click", function() {
-      taskItem.remove();
-  });
+  // Créer un objet contenant les données du formulaire
+  var formData = {
+      email: email,
+      password: password
+  };
 
-  taskItem.appendChild(completeBtn);
-  taskItem.appendChild(editBtn);
-  taskItem.appendChild(deleteBtn);
+  // Convertir l'objet en chaîne JSON
+  var formDataJSON = JSON.stringify(formData);
 
-  taskList.appendChild(taskItem);
+  // Enregistrer les données dans le local storage avec une clé unique
+  localStorage.setItem('inscriptionData', formDataJSON);
+
+  // Afficher un message de succès ou rediriger l'utilisateur vers une autre page
+  alert("Inscription réussie !");
 }
 
-// Ajout d'une nouvelle tâche lorsque le bouton "Ajouter" est cliqué
-addTaskBtn.addEventListener("click", function() {
-  const taskText = taskInput.value.trim();
-  if (taskText !== "") {
-      createTask(taskText);
-      taskInput.value = "";
-  }
-});
+// Fonction appelée lors de la soumission du formulaire de connexion
+function sauvegarderConnexion() {
+  // Récupérer les valeurs des champs du formulaire
+  var username = document.getElementsByName('uname')[0].value;
+  var password = document.getElementsByName('psw')[0].value;
 
-// Marquer une tâche comme terminée en cliquant dessus
-taskList.addEventListener("click", function(event) {
-  if (event.target.tagName === "DIV") {
-      event.target.classList.toggle("completed");
-  }
-});
+  // Créer un objet contenant les données du formulaire
+  var formData = {
+      username: username,
+      password: password
+  };
 
-// Utilisation du stockage local pour sauvegarder les tâches
-window.addEventListener("beforeunload", function() {
-  const tasks = [];
-  taskList.childNodes.forEach(function(taskItem) {
-      tasks.push({
-          description: taskItem.textContent,
-          completed: taskItem.classList.contains("completed")
-      });
-  });
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-});
+  // Convertir l'objet en chaîne JSON
+  var formDataJSON = JSON.stringify(formData);
 
-// Chargement des tâches sauvegardées depuis le stockage local
-window.addEventListener("load", function() {
-  const sauvegardeTasks = localStorage.getItem("tasks");
-  if (sauvergardeTasks) {
-      const tasks = JSON.parse(sauvegardeTasks);
-      tasks.forEach(function(task) {
-          createTask(task.description);
-          if (task.completed) {
-              taskList.lastChild.classList.add("completed");
-          }
-      });
+  // Enregistrer les données dans le local storage avec une clé unique
+  localStorage.setItem('connexionData', formDataJSON);
+
+  // Afficher un message ou rediriger l utilisateur vers une autre page
+  alert("Connexion réussi ");
+}
+
   }
 });
 
